@@ -30,6 +30,18 @@ services:
     networks:
       - next_app_network # コンテナが参加するネットワークの名前
 
+  postgres-db:
+    container_name: db
+    image: postgres:16
+    ports:
+      - 5432:5432
+    volumes:
+      # - db-store:/var/lib/postgresql/data
+      - ./scripts/database/init:/docker-entrypoint-initdb.d # 初期化用のSQLファイルをマウント
+    environment:
+      - POSTGRES_PASSWORD=password
+    networks:
+      - next_app_network
 
 volumes:
   node_modules:
