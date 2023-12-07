@@ -1,5 +1,5 @@
 
-FROM node:18.12.1-bullseye-slim AS base
+FROM node:20.10.0-bullseye-slim AS base
 
 FROM base AS builder
 
