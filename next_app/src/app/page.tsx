@@ -14,7 +14,7 @@ export default function Page() {
   const { data, isLoading } = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data } = await axios.get("http://localhost:3000/api/users");
+      const { data } = await axios.get("/api/users");
       console.log(data);
       return data;
     },
@@ -22,7 +22,7 @@ export default function Page() {
 
   const { mutate } = useMutation({
     mutationFn: async (data: PostDataType) => {
-      const { data: res } = await axios.post("http://localhost:3000/api/users", data);
+      const { data: res } = await axios.post("/api/users", data);
       console.log(res);
     },
   });
