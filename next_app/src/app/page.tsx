@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
+import Header from "../components/header";
 
 type PostDataType = {
   name: string;
@@ -33,6 +34,7 @@ export default function Page() {
 
   return (
     <>
+      <Header title="HE研登校官吏" />
       <button onClick={handleAddUser}>add user</button>
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
