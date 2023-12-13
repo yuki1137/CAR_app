@@ -1,34 +1,30 @@
 import React, { useState } from "react";
+import { FaHome, FaBars } from "react-icons/fa";
 
 type HeaderProps = {
   title: string;
 };
 
 const Header = ({ title }: HeaderProps) => {
-  // ボタンがクリックされたかどうかを管理する状態変数
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const homeIcon = "/images/home-icon.png";
+  const menuIcon = "/images/menu-icon.png";
 
-  // ボタンクリック時の処理
-  const toggleMenu = () => {
-    setIsMenuOpen(true); // ボタンがクリックされたことを示す
-  };
-
-  const [isHomeOpen, setIsHomeOpen] = useState(false);
-
-  const toggleHome = () => {
-    setIsMenuOpen(true);
-  };
+  const toggleHome = () => {};
+  const toggleMenu = () => {};
 
   return (
-    <header>
-      <nav className="flex justify-between ">
-        <button onClick={toggleHome}>ホームボタン</button>
-        <div className="text-xl ">{title}</div>
-        <button onClick={toggleMenu}>ハンバーガーメニュー</button>
+    <header className="pt-2">
+      <nav className="flex justify-between items-center">
+        <button onClick={toggleHome} style={{ marginLeft: "5px" }}>
+          <FaHome size={30} />
+        </button>
+        <div className="text-xl" style={{ fontFamily: "Noto Sans JP, sans-serif" }}>
+          {title}
+        </div>
+        <button onClick={toggleMenu} style={{ marginRight: "8px" }}>
+          <FaBars size={25} />
+        </button>
       </nav>
-      {/*isMenuOpen が true のときにテキストが表示される*/}
-      {isMenuOpen && <div>ハンバーガーメニュー</div>}
-      {isHomeOpen && <div>ホームボタン</div>}
     </header>
   );
 };

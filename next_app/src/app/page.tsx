@@ -34,7 +34,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title="HE研登校官吏" />
+      <Header title="HE研登校管理" />
       <button onClick={handleAddUser}>add user</button>
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
