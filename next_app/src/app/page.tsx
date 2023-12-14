@@ -4,6 +4,8 @@ import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
+import Header from "../components/header";
+import { FaHome } from "react-icons/fa";
 
 type PostDataType = {
   name: string;
@@ -33,6 +35,7 @@ export default function Page() {
 
   return (
     <>
+      <Header title="HE研登校管理" icon={<FaHome size={30} />} />
       <button onClick={handleAddUser}>add user</button>
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
