@@ -28,7 +28,7 @@ textarea {
   }
 
   body {
-    color: rgb(var(--foreground-rgb)); /* ダークモード時のテキスト色を適用 */
+    color: rgb(var(--foreground-rgb)); /* ダークモード時のフォアグラウンドカラーを適用 */
     background-color: var(--background-color); /* ダークモード時の背景色を適用 */
   }
 }
