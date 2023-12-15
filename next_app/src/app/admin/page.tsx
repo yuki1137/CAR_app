@@ -1,11 +1,13 @@
 "use client";
+import React, { useReducer } from "react";
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
-import Header from "../components/Header";
-import { FaHome } from "react-icons/fa";
+import Header from "../../components/Header";
+import { FaUserCog } from "react-icons/fa";
+import { userAgent } from "next/server";
 
 type PostDataType = {
   name: string;
@@ -35,7 +37,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title="HE研登校管理" icon={<FaHome size={30} />} />
+      <Header title="管理ページ" icon={<FaUserCog size={30} />} />
       <button onClick={handleAddUser}>add user</button>
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
@@ -46,6 +48,25 @@ export default function Page() {
             </li>
           ))}
       </ul>
+      <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Promised Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {data?.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.promisedTime}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+
     </>
   );
 }
