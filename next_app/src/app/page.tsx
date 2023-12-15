@@ -4,7 +4,7 @@ import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
-import Header from "../components/header";
+import Header from "../components/Header";
 import { FaHome } from "react-icons/fa";
 
 type PostDataType = {
