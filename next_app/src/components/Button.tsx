@@ -22,6 +22,17 @@ const ableColors = {
 const disabledColor = "bg-gray-300 text-gray-500 cursor-not-allowed";
 
 const Button = ({ onClick, isDisabled, children, color, size, className }: ButtonProps) => {
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handleMouseDown = () => {
+    if (isDisabled) return;
+    setIsPressed(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsPressed(false);
+  };
+
   const handleClick = () => {
     if (isDisabled) return;
     onClick();
@@ -30,10 +41,13 @@ const Button = ({ onClick, isDisabled, children, color, size, className }: Butto
   return (
     <button
       onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       className={clsx(
-        "rounded-md ",
+        "rounded-md transition duration-300 ease-in-out transform",
         ableSizes[size ?? "medium"],
         isDisabled ? disabledColor : ableColors[color ?? "primary"],
+        isPressed && !isDisabled && "scale-95", // クリック時に縮むアニメーション
         className,
       )}
       disabled={isDisabled}
