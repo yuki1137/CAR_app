@@ -3,43 +3,40 @@ import React, { useState } from "react";
 
 interface ButtonProps {
   onClick: () => void;
+  isDisabled?: boolean;
   children?: React.ReactNode;
-  className?: string;
   color?: keyof typeof ableColors;
   size?: keyof typeof ableSizes;
+  className?: string;
 }
 
 const ableSizes = {
-  small: "px-2 py-1 text-sm",
-  medium: "px-4 py-2 text-md",
-  large: "px-6 py-3 text-lg",
+  medium: "m-1 px-4 py-2 text-md",
+  large: "m-2 px-6 py-3 text-3xl font-bold",
 };
 const ableColors = {
-  primary: "bg-green-600 text-white hover:bg-green-900",
-  secondary: "bg-gray-600 text-white hover:bg-gray-900",
-  disabled: "bg-red-600 text-white  hover:bg-red-900",
+  primary: "bg-primary text-white",
+  secondary: "bg-secondary text-white",
 };
 
-const Button = ({ onClick, className, children, color, size }: ButtonProps) => {
-  const [isClicked, setIsClicked] = useState(false);
+const disabledColor = "bg-gray-300 text-gray-500 cursor-not-allowed";
 
+const Button = ({ onClick, isDisabled, children, color, size, className }: ButtonProps) => {
   const handleClick = () => {
-    if (!isClicked) {
-      setIsClicked(true);
-      onClick();
-    }
+    if (isDisabled) return;
+    onClick();
   };
 
   return (
     <button
       onClick={handleClick}
       className={clsx(
-        "px-4 py-2 rounded-md ",
+        "rounded-md ",
         ableSizes[size ?? "medium"],
-        ableColors[color ?? "primary"],
-        isClicked ? ableColors.disabled : ableColors[color ?? "primary"],
+        isDisabled ? disabledColor : ableColors[color ?? "primary"],
+        className,
       )}
-      disabled={isClicked}
+      disabled={isDisabled}
     >
       {children}
     </button>
