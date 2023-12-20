@@ -261,7 +261,7 @@ export default function Page() {
         />
         <h3 className="text-lg text-center my-2">目標時間の設定</h3>
         <DrumTimePicker handleTime={handleTime} />
-        <Button onClick={handleClick} isDisabled={isButtonDisabled} className="my-4" size="large">
+        <Button onClick={handleClick} isDisabled={isButtonDisabled} className="my-4" size="medium">
           登録
         </Button>
       </div>
