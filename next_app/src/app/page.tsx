@@ -40,11 +40,15 @@ export default function Page() {
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
         {data &&
-          data.map((user) => (
-            <li key={user.id}>
-              {user.name} {typeof user.promisedTime === "string" && user.promisedTime}
-            </li>
-          ))}
+          data.map((user) => {
+            console.log("promisedTime type:", typeof user.promisedTime);
+
+            return (
+              <li key={user.id}>
+                {user.name} {typeof user.promisedTime === "string" && user.promisedTime}
+              </li>
+            );
+          })}
       </ul>
     </>
   );
