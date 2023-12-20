@@ -31,4 +31,8 @@ textarea {
     color: rgb(var(--foreground-rgb)); /* ダークモード時のフォアグラウンドカラーを適用 */
     background-color: var(--background-color); /* ダークモード時の背景色を適用 */
   }
+
+  .btn-disabled-dark {
+    color: #554/* ダークモード時のdisabledボタンの色 */
+  }
 }

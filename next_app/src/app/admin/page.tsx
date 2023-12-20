@@ -6,7 +6,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
 import Header from "../../components/Header";
-import { FaUserCog } from "react-icons/fa";
+import { FaUserCog, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { userAgent } from "next/server";
 import convertTimeToHHMMFormat from "../../utils/convertTimeToHHMMFormat";
 import { useTable, usePagination, Row } from "react-table";
@@ -103,6 +103,8 @@ export default function Page() {
     //前のページへの移動が可能かどうかを示すブール値
     prepareRow,
     //各行（<tr>）をレンダリングする前に呼び出す必要がある関数。行に必要なプロパティやイベントハンドラを準備する
+    state: { pageIndex: currentPageIndex },
+    rows,
   } = tableInstance;
 
   if (isLoading) {
@@ -118,15 +120,15 @@ export default function Page() {
 
   //テーブルのヘッダー行のスタイル
   const thStyles = {
-    border: "1px solid black", //要素の境界線のスタイル。solidは実線という意味
+    border: "1px solid", //要素の境界線のスタイル。solidは実線という意味
     padding: "8px", //要素の内側の余白
     textAlign: "center" as "center", //テキストの水平方向の配置は中央
-    backgroundColor: "white", //要素の背景色
+    // backgroundColor: "white", //要素の背景色
   };
 
   //テーブルのデータセルのスタイル
   const tdStyles = {
-    border: "1px solid black", //要素の境界線のスタイル
+    border: "1px solid", //要素の境界線のスタイル
     padding: "8px", //要素の内側の余白
     textAlign: "center" as "center", //テキストの水平方向の配置は中央
     overflow: "auto", //コンテンツがセルのサイズを超えた場合の挙動を指定,"auto"で必要に応じてスクロールバーが表示される
@@ -144,7 +146,7 @@ export default function Page() {
     maxWidth: "100px" as const, // セルの最大幅を100ピクセルに設定
     overflow: "auto" as const, // セル内の文字がセルのサイズを超えた場合に、スクロールバーが自動的に表示される
     whiteSpace: "nowrap" as const, // nowrapはテキストを強制的に1行に保持し 改行を防ぐ
-    border: "1px solid black" as const, //要素の境界線のスタイル
+    border: "1px solid" as const, //要素の境界線のスタイル
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -209,20 +211,28 @@ export default function Page() {
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
+      <div className="flex justify-end items-center px-7 my-1">
+        <div>
+          {rows.length > 0
+            ? `${currentPageIndex * pageSize + 1}
+               -${Math.min((currentPageIndex + 1) * pageSize, rows.length)} 
+               / ${rows.length} 件`
+            : "ユーザーデータがありません"}
+        </div>
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className="px-4 py-2 border rounded text-sm mx-2"
+          className={`px-1 py-2 ${!canPreviousPage ? "text-gray-400 btn-disabled-dark" : ""}`}
         >
-          前へ
+          {/* previousPageをアロー関数で呼び出すことでユーザーがボタンをクリックした時にのみ nextPage 関数が実行される。ページがロードされるたびに実行されない。 */}
+          <FaAngleLeft size={25} />
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className="px-4 py-2 border rounded text-sm mx-2"
+          className={`px-2 py-2 ${!canNextPage ? "text-gray-400 btn-disabled-dark" : ""}`}
         >
-          次へ
+          <FaAngleRight size={25} />
         </button>
       </div>
     </>
