@@ -25,6 +25,8 @@ textarea {
   :root {
     --foreground-rgb: 255, 255, 255; /* ダークモード時のフォアグラウンドカラー（白） */
     --background-color: #000000; /* ダークモード時の背景色（黒） */
+    --input-background-color: #000000; /* ダークモード時の入力フィールドの背景色 */
+    --input-text-color: #ffffff; /* ダークモード時の入力フィールドのテキストカラー */
   }
 
   body {
@@ -32,7 +34,13 @@ textarea {
     background-color: var(--background-color); /* ダークモード時の背景色を適用 */
   }
 
-  .btn-disabled-dark {
-    color: #554/* ダークモード時のdisabledボタンの色 */
+  input {
+    background-color: var(
+      --input-background-color
+    ); /* ダークモード時の入力フィールドの背景色を適用 */
+    color: var(--input-text-color); /* ダークモード時の入力フィールドのテキストカラーを適用 */
+    border-color: var(
+      --input-text-color
+    ); /* ダークモード時の入力フィールドの境界線のカラーを適用 */
   }
 }

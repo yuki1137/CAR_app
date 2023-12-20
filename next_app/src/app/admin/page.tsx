@@ -10,6 +10,8 @@ import { FaUserCog, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { userAgent } from "next/server";
 import convertTimeToHHMMFormat from "../../utils/convertTimeToHHMMFormat";
 import { useTable, usePagination, Row } from "react-table";
+import DrumTimePicker from "../../components/DrumTimePicker";
+import Button from "../../components/Button";
 
 type PostDataType = {
   name: string;
@@ -32,8 +34,31 @@ export default function Page() {
     },
   });
 
-  const handleAddUser = () => {
-    mutate({ name: "Tom", promisedTime: "2021-01-01" });
+  const [userName, setUserName] = useState("");
+  const [promisedTime, setPromisedTime] = useState("");
+  const isButtonDisabled = userName === ""; // userNameが空ならisButtonDisabledはtrue
+
+  // ユーザー名を更新する関数、テキスト入力の変更イベントが発生すると呼び出される
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //event.target.value で入力フィールドの現在の値を取得
+    setUserName(event.target.value);
+  };
+
+  const handleTime = (hour: number, minute: number) => {
+    const time = new Date(
+      //固定の年月日をつける,左に0をつけて2桁にする、日本時間にする
+      `2000-01-01T${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}:00+09:00`,
+    ); // ISO8601形式の文字列に変換
+    setPromisedTime(time.toISOString());
+  };
+
+  //登録ボタンを押すとユーザーデータが登録される
+  const handleClick = () => {
+    mutate({ name: userName, promisedTime });
+    setUserName(""); // ユーザー名をクリア
+    setPromisedTime(""); // 目標時間をクリア
   };
 
   const [pageIndex] = useState(0); //現在のpageIndex（ページ番号）を作成,初期値を0にしページネーションにおいて最初のページを指し、ページ番号のカウントが0から始まるようにする
@@ -154,16 +179,6 @@ export default function Page() {
   return (
     <>
       <Header title="管理ページ" icon={<FaUserCog size={30} />} />
-      <button onClick={handleAddUser}>add user</button>
-      {/* <div>isLoading: {isLoading ? "true" : "false"} </div>
-      <ul>
-        {users &&
-          users.map((user: User) => (
-            <li key={user.id}>
-              {user.name} {typeof user.promisedTime === "string" && user.promisedTime}
-            </li>
-          ))}
-      </ul> */}
       <h2 className="text-xl  text-center my-4">ユーザー一覧</h2>
       <div style={tableContainerStyles}>
         {/* getTableProps 関数が返すオブジェクト内のすべてのプロパティと値が、<table> タグに個別のプロパティとして適用 */}
@@ -222,7 +237,7 @@ export default function Page() {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className={`px-1 py-2 ${!canPreviousPage ? "text-gray-400 btn-disabled-dark" : ""}`}
+          className={`px-1 py-2 ${!canPreviousPage ? "text-gray-400" : ""}`}
         >
           {/* previousPageをアロー関数で呼び出すことでユーザーがボタンをクリックした時にのみ nextPage 関数が実行される。ページがロードされるたびに実行されない。 */}
           <FaAngleLeft size={25} />
@@ -230,10 +245,25 @@ export default function Page() {
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className={`px-2 py-2 ${!canNextPage ? "text-gray-400 btn-disabled-dark" : ""}`}
+          className={`px-2 py-2 ${!canNextPage ? "text-gray-400" : ""}`}
         >
           <FaAngleRight size={25} />
         </button>
+      </div>
+      <div className="text-center justify-center my-8">
+        <h2 className="text-xl text-center my-2">新しいユーザーを登録</h2>
+        <h3 className="text-lg text-center my-2">ユーザー名</h3>
+        <input
+          type="text"
+          className="border-2 border-gray-600 p-2 rounded-md"
+          value={userName}
+          onChange={handleNameChange}
+        />
+        <h3 className="text-lg text-center my-2">目標時間の設定</h3>
+        <DrumTimePicker handleTime={handleTime} />
+        <Button onClick={handleClick} isDisabled={isButtonDisabled} className="my-4" size="large">
+          登録
+        </Button>
       </div>
     </>
   );
