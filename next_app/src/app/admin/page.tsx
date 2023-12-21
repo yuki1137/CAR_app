@@ -45,13 +45,12 @@ export default function Page() {
   };
 
   const handleTime = (hour: number, minute: number) => {
-    const time = new Date(
+    const time =
       //固定の年月日をつける,左に0をつけて2桁にする、日本時間にする
       `2000-01-01T${hour.toString().padStart(2, "0")}:${minute
         .toString()
-        .padStart(2, "0")}:00+09:00`,
-    ); // ISO8601形式の文字列に変換
-    setPromisedTime(time.toISOString());
+        .padStart(2, "0")}:00+09:00`;
+    setPromisedTime(time);
   };
 
   //登録ボタンを押すとユーザーデータが登録される
