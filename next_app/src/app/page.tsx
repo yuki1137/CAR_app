@@ -29,14 +29,10 @@ export default function Page() {
     },
   });
 
-  const handleAddUser = () => {
-    mutate({ name: "Carlie", promisedTime: "2021-01-01" });
-  };
 
   return (
     <>
       <Header title="HE研登校管理" icon={<FaHome size={30} />} />
-      <button onClick={handleAddUser}>add user</button>
       <div>isLoading: {isLoading ? "true" : "false"} </div>
       <ul>
         {data &&
