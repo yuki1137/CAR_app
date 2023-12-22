@@ -7,6 +7,8 @@ import { stringify } from "querystring";
 import Header from "../components/Header";
 import { FaHome } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import Button from "../components/Button";
+import { useRouter } from "next/navigation";
 
 type PostDataType = {
   name: string;
@@ -14,6 +16,7 @@ type PostDataType = {
 };
 
 export default function Page() {
+  const router = useRouter();
   const [data, setData] = useState<User[]>([]);
   const { isLoading } = useQuery<User[]>({
     queryKey: ["users"],
@@ -37,8 +40,6 @@ export default function Page() {
     mutate({ name: "Carlie", promisedTime: "2021-01-01" });
   };
 
-  //以下追加したコード
-
   useEffect(() => {
     // データを取得する非同期関数
     const fetchData = async () => {
@@ -55,6 +56,15 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // マウント時に1回だけ実行
 
+  const handleClick = () => {
+    const selectedUser = data.find((user) => user.name === selectedName);
+
+    if (selectedUser) {
+      const url = `/attend/${selectedUser.id}`;
+      router.push(url);
+    }
+  };
+
   return (
     <>
       <Header title="HE研登校管理" icon={<FaHome size={30} />} />
@@ -63,10 +73,14 @@ export default function Page() {
 
       {/* プルダウンリスト */}
       <label>
-        Select a name:
-        <select value={selectedName} onChange={(e) => setSelectedName(e.target.value)}>
+        ユーザー選択:
+        <select
+          value={selectedName}
+          onChange={(e) => setSelectedName(e.target.value)}
+          className="rounded-md block appearance-none justify-center bg-white border border-gray-900"
+        >
           {/* 初期オプション */}
-          <option value="">Select...</option>
+          <option value=""></option>
           {/* data から取得した名前をオプションとしてマップ */}
           {data &&
             data.map((user) => (
@@ -75,18 +89,10 @@ export default function Page() {
               </option>
             ))}
         </select>
+        <Button onClick={handleClick} color="primary">
+          決定
+        </Button>
       </label>
-      {/* 選択された名前を表示 */}
-      <div>Selected Name: {selectedName}</div>
-
-      <ul>
-        {data &&
-          data.map((user) => (
-            <li key={user.id}>
-              {user.name} {typeof user.promisedTime === "string" && user.promisedTime}
-            </li>
-          ))}
-      </ul>
     </>
   );
 }
