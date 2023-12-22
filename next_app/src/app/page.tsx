@@ -68,16 +68,17 @@ export default function Page() {
   return (
     <>
       <Header title="HE研登校管理" icon={<FaHome size={30} />} />
-      <button onClick={handleAddUser}>add user</button>
-      <div>isLoading: {isLoading ? "true" : "false"} </div>
+      {/* <button onClick={handleAddUser}>add user</button> */}
+      {/* <div>isLoading: {isLoading ? "true" : "false"} </div> */}
 
       {/* プルダウンリスト */}
-      <label>
-        ユーザー選択:
+      <div className="flex justify-center pt-8 pb-2 font-bold">ユーザー選択</div>
+      <label className="flex justify-center">
+        {/* <div className="flex justify-center items-center"> */}
         <select
           value={selectedName}
           onChange={(e) => setSelectedName(e.target.value)}
-          className="rounded-md block appearance-none justify-center bg-white border border-gray-900"
+          className="w-32 px-2 py-2 rounded-md block appearance-none bg-white border border-gray-900"
         >
           {/* 初期オプション */}
           <option value=""></option>
@@ -89,9 +90,10 @@ export default function Page() {
               </option>
             ))}
         </select>
-        <Button onClick={handleClick} color="primary">
+        <Button onClick={handleClick} color="primary" className="flex justify-center">
           決定
         </Button>
+        {/* </div> */}
       </label>
     </>
   );
