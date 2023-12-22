@@ -1,13 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const Page = () => {
-  const router = useRouter();
-  console.log(router.query);
-  const { id } = router.query;
+const Page = ({ params }: { params: { userId: string } }) => {
+  const userId = params.userId;
   // const [userData, setUserData] = useState(null);
 
   // useEffect(() => {
@@ -27,13 +24,13 @@ const Page = () => {
   //   }
   // }, [id]);
 
-  if (!id) {
+  if (!userId) {
     return <div>NO DATA</div>;
   }
 
   return (
     <div>
-      <h1>id: {id}</h1>
+      <h1>id: {userId}</h1>
     </div>
   );
 };
