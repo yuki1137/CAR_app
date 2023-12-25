@@ -1,15 +1,46 @@
 import { z } from "zod";
+import prisma from "../lib/prisma";
 
-//2000-01-01T10:30:00+09:00のような型（ISO8601拡張形式）を識別する正規表現
+//4桁-2桁-2桁 T 2桁:2桁:2桁+09:00の形式か検証
 const iso8601ExtendedRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})\+09:00$/;
-//4桁-2桁-2桁 T 2桁:2桁:2桁+09:00の形式
 
 const userSchema = z.object({
   name: z.string(),
-  //refineでZodスキーマにカスタムの検証ロジックを追加する
   promisedTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
-  //valueにはpromisedTimeの値が入る。.test(value)で正規表現にマッチするか判定
-  //text(value)がtrueならバリデーションをパス
 });
-
 export { userSchema };
+
+async function validateUserId(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  return user !== null; //存在するユーザーIDならtrue
+}
+
+const absenceSchema = z.object({
+  userId: z.string().refine(
+    async (userId) => {
+      return validateUserId(userId);
+    },
+    {
+      message: "存在しないユーザーIDです",
+    },
+  ),
+  reason: z.string(),
+  absenceTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
+});
+export { absenceSchema };
+
+//同じ人が同じ日に公欠登録しないか検証
+async function validateAbsence(userId: string, absenceTime: string) {
+   //年月日が同じ、時間が違うものもはじく
+  const datePart = absenceTime.slice(0, 10); // 'YYYY-MM-DD' 部分を取得
+  const minDate = new Date(datePart + "T00:00:00+09:00");
+  const maxDate = new Date(datePart + "T23:59:59+09:00");
+
+  const absence = await prisma.absence.findFirst({
+    where: { userId: userId, absenceTime: { gte: minDate, lte: maxDate } },
+  });
+  return absence === null; //存在しないabsenceならtrue
+}
+export { validateAbsence };
