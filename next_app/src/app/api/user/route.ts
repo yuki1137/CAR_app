@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
+    select: {name: true, promisedTime: true} //名前と目標時間のみ抽出
   });
 
   const absences = await prisma.absence.findMany({
