@@ -44,3 +44,9 @@ async function validateAbsence(userId: string, absenceTime: string) {
   return absence === null; //存在しないabsenceならtrue
 }
 export { validateAbsence };
+
+const changeTimeSchema = z.object({
+  id: z.string(),
+  promisedTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
+});
+export { changeTimeSchema };
