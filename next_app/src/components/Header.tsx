@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
+import HamburgerMenu from "./HamburgerMenu";
 
 type HeaderProps = {
   title: string;
@@ -7,7 +8,9 @@ type HeaderProps = {
 };
 
 const Header = ({ title, icon }: HeaderProps) => {
-  const toggleMenu = () => {};
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => {HamburgerMenu};
+  
 
   return (
     <header className="pt-2">
