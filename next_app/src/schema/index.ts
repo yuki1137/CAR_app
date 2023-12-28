@@ -33,7 +33,7 @@ export { absenceSchema };
 
 //同じ人が同じ日に公欠登録しないか検証
 async function validateAbsence(userId: string, absenceTime: string) {
-   //年月日が同じ、時間が違うものもはじく
+  //年月日が同じ、時間が違うものもはじく
   const datePart = absenceTime.slice(0, 10); // 'YYYY-MM-DD' 部分を取得
   const minDate = new Date(datePart + "T00:00:00+09:00");
   const maxDate = new Date(datePart + "T23:59:59+09:00");
@@ -44,3 +44,15 @@ async function validateAbsence(userId: string, absenceTime: string) {
   return absence === null; //存在しないabsenceならtrue
 }
 export { validateAbsence };
+
+const changeTimeSchema = z.object({
+  id: z.string(),
+  promisedTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
+});
+export { changeTimeSchema };
+
+const attendanceTimeSchema = z.object({
+  id: z.string(),
+  attendanceTime: z.string(),
+});
+export { attendanceTimeSchema };
