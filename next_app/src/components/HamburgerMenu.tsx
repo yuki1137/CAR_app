@@ -66,7 +66,7 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
           <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
             <HamburgerButton
               icon={<FaHome size={40} />}
-              title="登校を登録する"
+              title="登校を記録"
               toggleEvent={redirectHome}
             />
           </div>
