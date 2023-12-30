@@ -9,8 +9,9 @@
   --background-end-rgb: 255, 255, 255;
   --dark-mode-bg-color: #000000; /* ダークモード時の背景色 */
   --dark-mode-border-color: #ffffff; /* ダークモード時の枠線色 */
-  --menu-background-color-dark: #000000; /* Black background for the menu */
-  --button-border-color-dark: #ffffff; /* White border for buttons */
+  --menu-background-color-dark: #000000; 
+  --button-border-color-dark: #ffffff; 
+  --border-color-light: #000000; /* ライトモード時のボーダーカラー (黒) */
 }
 
 body {
@@ -25,6 +26,12 @@ textarea {
   font-family: "Noto Sans JP", sans-serif;
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+    --border-color: var(--border-color-light);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255; /* ダークモード時のフォアグラウンドカラー（白） */
@@ -33,6 +40,7 @@ textarea {
     --input-text-color: #ffffff; /* ダークモード時の入力フィールドのテキストカラー */
     --foreground-rgb: 255, 255, 255;
     --background-color: #000000;
+    
   }
 
   body {

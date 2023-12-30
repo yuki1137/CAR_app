@@ -63,14 +63,14 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
       </div>
       {userId && ( //admin,welcomeページでは表示しない
         <>
-          <div className="border-t-2">
+          <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
             <HamburgerButton
               icon={<FaBed size={40} />}
               title="公欠の登録"
               toggleEvent={redirectAbsent}
             />
           </div>
-          <div className="border-t-2">
+          <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
             <HamburgerButton
               icon={<FaRegCalendarAlt size={40} />}
               title="登校目標時刻の変更"
@@ -79,7 +79,7 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
           </div>
         </>
       )}
-      <div className="border-t-2 border-b-2">
+      <div className="border-t-2 border-b-2 " style={{ borderColor: "var(--border-color)" }}>
         <HamburgerButton
           icon={<FaGithub size={40} />}
           title="開発に参加しよう"
