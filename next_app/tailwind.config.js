@@ -16,6 +16,24 @@ module.exports = {
         secondary: "#FF4858",
       },
     },
+
+    // slideInとslideOutという名前のスライドアニメーションを定義
+    extend: {
+      keyframes: {
+        slideIn: {
+          "0%": { transform: "translateX(100%)" }, //開始時は右端から
+          "100%": { transform: "translateX(0)" }, //終了時は左端まで移動
+        },
+        slideOut: {
+          "0%": { transform: "translateX(0)" }, //開始時は左端から
+          "100%": { transform: "translateX(100%)" }, //終了時は右端まで移動
+        },
+      },
+      animation: {
+        slideIn: "slideIn 0.3s ease-out forwards",
+        slideOut: "slideOut 0.3s ease-out forwards",
+      },
+    },
   },
   plugins: [],
   important: true,

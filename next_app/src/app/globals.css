@@ -7,6 +7,11 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --dark-mode-bg-color: #000000; /* ダークモード時の背景色 */
+  --dark-mode-border-color: #ffffff; /* ダークモード時の枠線色 */
+  --menu-background-color-dark: #000000; 
+  --button-border-color-dark: #ffffff; 
+  --border-color-light: #000000; /* ライトモード時のボーダーカラー (黒) */
 }
 
 body {
@@ -21,12 +26,21 @@ textarea {
   font-family: "Noto Sans JP", sans-serif;
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+    --border-color: var(--border-color-light);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255; /* ダークモード時のフォアグラウンドカラー（白） */
     --background-color: #000000; /* ダークモード時の背景色（黒） */
     --input-background-color: #000000; /* ダークモード時の入力フィールドの背景色 */
     --input-text-color: #ffffff; /* ダークモード時の入力フィールドのテキストカラー */
+    --foreground-rgb: 255, 255, 255;
+    --background-color: #000000;
+    
   }
 
   body {
@@ -43,4 +57,14 @@ textarea {
       --input-text-color
     ); /* ダークモード時の入力フィールドの境界線のカラーを適用 */
   }
+
+  .dark-mode-bg {
+    background-color: var(--dark-mode-bg-color);
+  }
+
+  .dark-mode-border {
+    border-color: var(--dark-mode-border-color);
+  }
 }
+
+
