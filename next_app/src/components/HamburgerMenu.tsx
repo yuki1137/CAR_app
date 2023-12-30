@@ -65,6 +65,13 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
         <>
           <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
             <HamburgerButton
+              icon={<FaHome size={40} />}
+              title="登校を登録する"
+              toggleEvent={redirectHome}
+            />
+          </div>
+          <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
+            <HamburgerButton
               icon={<FaBed size={40} />}
               title="公欠の登録"
               toggleEvent={redirectAbsent}
@@ -86,17 +93,6 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
           toggleEvent={redirectGit}
         />
       </div>
-      {userId && ( //admin,welcomeページでは表示しない
-        <footer className="absolute bottom-0 right-0 p-2">
-          <div>
-            <HamburgerButton
-              icon={<FaHome size={30} />}
-              title="ホームに戻る"
-              toggleEvent={redirectHome}
-            />
-          </div>
-        </footer>
-      )}
     </div>
   );
 };
