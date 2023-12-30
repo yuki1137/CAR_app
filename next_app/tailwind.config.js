@@ -15,10 +15,6 @@ module.exports = {
         primary: "#1B7F79",
         secondary: "#FF4858",
       },
-    },
-
-    // slideInとslideOutという名前のスライドアニメーションを定義
-    extend: {
       keyframes: {
         slideIn: {
           "0%": { transform: "translateX(100%)" }, //開始時は右端から
