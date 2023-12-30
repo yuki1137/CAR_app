@@ -5,12 +5,14 @@ import HamburgerMenu from "./HamburgerMenu";
 type HeaderProps = {
   title: string;
   icon: React.ReactNode;
+  userId?: string;
 };
 
-const Header = ({ title, icon }: HeaderProps) => {
+const Header = ({ title, icon, userId }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => {HamburgerMenu};
-  
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <header className="pt-2">
@@ -21,6 +23,7 @@ const Header = ({ title, icon }: HeaderProps) => {
           <FaBars size={25} />
         </button>
       </nav>
+      {isOpen && <HamburgerMenu closeMenu={toggleMenu} userId={userId} />}
     </header>
   );
 };

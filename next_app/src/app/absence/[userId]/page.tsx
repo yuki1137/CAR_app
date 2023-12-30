@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import React from "react";
 import Header from "../../../components/Header";
-import { FaHome } from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
 
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
@@ -14,7 +14,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
 
   return (
     <div>
-      <Header title="HE研登校管理" icon={<FaHome size={30} />}  userId={userId} />
+      <Header title="公欠の登録" icon={<FaBed size={30} />} userId={userId} />
       <h1>id: {userId}</h1>
     </div>
   );
