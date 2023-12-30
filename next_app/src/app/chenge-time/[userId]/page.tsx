@@ -13,6 +13,8 @@ export default function Page() {
 
   useEffect(() => {
     setIsDisabled(true);
+    setHour(8);
+    setMinute(30);
 
     return () => {
       setIsDisabled(false);
@@ -23,8 +25,8 @@ export default function Page() {
     console.log(hour, minute);
 
     setIsDisabled(false);
-    setHour(hour);
-    setMinute(minute);
+    // setHour(hour);
+    // setMinute(minute);
   };
 
   const handleClicked = () => {};
