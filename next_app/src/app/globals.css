@@ -9,9 +9,11 @@
   --background-end-rgb: 255, 255, 255;
   --dark-mode-bg-color: #000000; /* ダークモード時の背景色 */
   --dark-mode-border-color: #ffffff; /* ダークモード時の枠線色 */
-  --menu-background-color-dark: #000000; 
-  --button-border-color-dark: #ffffff; 
+  --menu-background-color-dark: #000000;
+  --button-border-color-dark: #ffffff;
   --border-color-light: #000000; /* ライトモード時のボーダーカラー (黒) */
+  --text-color-light: #000000; /* ライトモードのテキストカラー（黒） */
+  --text-color-dark: #ffffff; /* ダークモードのテキストカラー（白） */
 }
 
 body {
@@ -29,6 +31,7 @@ textarea {
 @media (prefers-color-scheme: light) {
   body {
     --border-color: var(--border-color-light);
+    --text-color: var(--text-color-light); /* ライトモードのテキストカラーを使用 */
   }
 }
 
@@ -40,7 +43,7 @@ textarea {
     --input-text-color: #ffffff; /* ダークモード時の入力フィールドのテキストカラー */
     --foreground-rgb: 255, 255, 255;
     --background-color: #000000;
-    
+    --text-color: var(--text-color-dark); /* ダークモードのテキストカラーを使用 */
   }
 
   body {
@@ -65,6 +68,8 @@ textarea {
   .dark-mode-border {
     border-color: var(--dark-mode-border-color);
   }
+
+  .bg-dark-mode-bg {
+    background-color: #000; /* 黒色の背景 */
+  }
 }
-
-
