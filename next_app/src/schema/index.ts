@@ -52,7 +52,8 @@ const changeTimeSchema = z.object({
 export { changeTimeSchema };
 
 const attendanceTimeSchema = z.object({
-  id: z.string(),
   attendanceTime: z.string(),
 });
 export { attendanceTimeSchema };
+
+
