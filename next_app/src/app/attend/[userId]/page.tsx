@@ -8,6 +8,7 @@ import Header from "../../../components/Header";
 import { FaHome } from "react-icons/fa";
 import convertTimeToHHMMFormat from "@/utils/convertTimeToHHMMFormat";
 import Button from "@/components/Button";
+import CustomLinearProgress from "@/components/CustomLinearProgress";
 
 type UserInfo = {
   user: User;
@@ -163,11 +164,20 @@ const Page = ({ params }: { params: { userId: string } }) => {
   const AttendMessageMemo = React.memo(AttendMessage);
 
   if (!userId) {
-    return <div>error: user undefined</div>;
+    return (
+      <div>
+        <Header title="登校を登録" icon={<FaHome size={30} />} userId={userId} />
+      </div>
+    );
   }
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return (
+      <div>
+        <Header title="登校を登録" icon={<FaHome size={30} />} userId={userId} />
+        <CustomLinearProgress />
+      </div>
+    );
   }
 
   if (!userInfo) {
