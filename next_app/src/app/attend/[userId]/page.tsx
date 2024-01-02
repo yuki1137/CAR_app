@@ -40,10 +40,17 @@ const getMinutes = (time: Date) => {
   return time.getHours() * 60 + time.getMinutes();
 };
 
-const getLateMinutes = (attendTime: Date | string, promisedTime: Date | string) => {
-  const revisedAttendTime = stringToDate(attendTime);
+const minutesToHHMMFormat = (minutes: number) => {
+  const hour = Math.floor(minutes / 60);
+  const minute = minutes % 60;
+  return `${hour}時間${minute}分`;
+};
+
+const getLateMinutes = (promisedTime: Date | string) => {
+  const currentTime = new Date();
   const revisedPromisedTime = convertTodayDate(stringToDate(promisedTime));
-  return getMinutes(revisedAttendTime) - getMinutes(revisedPromisedTime);
+  // console.log("revised", currentTime, revisedPromisedTime);
+  return getMinutes(currentTime) - getMinutes(revisedPromisedTime);
 };
 
 const getMessageState = (isAttend: boolean, isLate: boolean, isAbsence: boolean) => {
@@ -74,17 +81,17 @@ const AttendMessage = ({
   const isAttend = attendInfo.isAttend;
   const promisedTime = convertTimeToHHMMFormat(userInfo.user.promisedTime);
   const attendanceTime = convertTimeToHHMMFormat(attendInfo.attendanceTime);
-  const lateMinutes = getLateMinutes(attendInfo.attendanceTime, userInfo.user.promisedTime);
+  const lateMinutes = getLateMinutes(userInfo.user.promisedTime);
   const isLate = lateMinutes > 0;
   const isAbsence = getTodayAbsence(userInfo.absences).length > 0;
   const messageState = getMessageState(isAttend, isLate, isAbsence);
-  console.log(messageState, isAttend, isLate, isAbsence);
+  // console.log(messageState, isAttend, isLate, isAbsence);
   const message = [
     `${promisedTime} までに登校してください`,
     `本日は公欠が登録されています`,
-    `${lateMinutes}分遅刻しています`,
+    `${minutesToHHMMFormat(lateMinutes)}遅刻しています`,
     `登校時刻：${attendanceTime}`,
-    `登校時刻：${attendanceTime}`,
+    `登校時刻：${attendanceTime}（遅刻）`,
   ];
   const messageColor = ["text-red-500", "text-red-500", "text-red-500", "", "text-red-500"];
   return (
@@ -116,7 +123,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
     queryKey: ["userInfo", userId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/user?id=${userId}`);
-      console.log("userInfo", data);
+      // console.log("userInfo", data);
       return data;
     },
   });
@@ -125,7 +132,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
     queryKey: ["attendInfo", userId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/attend?id=${userId}`);
-      console.log("attendInfo", data);
+      // console.log("attendInfo", data);
       return data;
     },
   });
@@ -147,13 +154,13 @@ const Page = ({ params }: { params: { userId: string } }) => {
     mutate({ id: userId });
   };
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+  // useEffect(() => {
+  //   console.log(userInfo);
+  // }, [userInfo]);
 
-  useEffect(() => {
-    console.log(attendInfo);
-  }, [attendInfo]);
+  // useEffect(() => {
+  //   console.log(attendInfo);
+  // }, [attendInfo]);
 
   useEffect(() => {
     if (!isLoadingUser && !isLoadingAttend) {
