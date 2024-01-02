@@ -5,12 +5,22 @@ import React from "react";
 import Header from "../../../components/Header";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
+import DatePicker, { Value } from "react-multi-date-picker";
+
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
+  const today = new Date();
+  const tomorrow = new Date();
+
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const [values, setValues] = useState<Value>([today, tomorrow]);
 
   if (!userId) {
     return <div>NO DATA</div>;
   }
+
+  return <DatePicker multiple value={values} onChange={setValues} />;
 
   return (
     <div>

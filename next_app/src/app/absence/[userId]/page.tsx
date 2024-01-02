@@ -16,9 +16,9 @@ const Page = ({ params }: { params: { userId: string } }) => {
   //DatePickerで今日以降の日付のみ選択可能にする
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const initialDate = new DateObject(tomorrow);
+  // const initialDate = new DateObject(tomorrow);
 
-  const [absenceDate, setAbsenceDate] = useState<Value>([initialDate]);
+  const [absenceDate, setAbsenceDate] = useState<Value>([]); //初期値を入れると複数選択できなくなる
   const [absenceReason, setAbsenceReason] = useState("公欠理由を記述（例：帰省）");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
@@ -283,14 +283,18 @@ const Page = ({ params }: { params: { userId: string } }) => {
     <div>
       <Header title="公欠の登録" icon={<FaBed size={30} />} userId={userId} />
       <h2 className="text-xl  text-center  my-6">いつ公欠しますか？</h2>
-      <div className="text-xl  justify-center text-center ">
+      <div className="flex justify-center items-center mb-4">
+        <div className="mr-2 text-base ite">日付</div>
         <DatePicker
           multiple={true}
           value={absenceDate}
           onChange={setAbsenceDate}
           minDate={tomorrow}
-          className="my-4"
+          className="my-4 ml-2"
+          style={{ width: "150px" }}
         />
+      </div>
+      <div className="text-xl  justify-center text-center ">
         <input
           type="text"
           // value="公欠理由を記述（例：帰省"
@@ -415,5 +419,3 @@ const Page = ({ params }: { params: { userId: string } }) => {
 };
 
 export default Page;
-
-
