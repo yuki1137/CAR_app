@@ -62,7 +62,7 @@ export default function Page({ params }: { params: { userId: string } }) {
 
   return (
     <>
-      <Header title="目標の変更" icon={<FaBusinessTime size={30} />} />
+      <Header title="目標の変更" icon={<FaBusinessTime size={30} />} userId={userId} />
 
       <div className="flex justify-center p-8">
         <>現在の目標時間：</>
