@@ -115,7 +115,6 @@ const getTodayAbsence = (absences: Absence[]) => {
 };
 
 const Page = ({ params }: { params: { userId: string } }) => {
-  const queryClient = new QueryClient();
   const userId = params.userId;
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

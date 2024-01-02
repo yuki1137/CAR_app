@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HamburgerButton from "./HamburgerButton";
-import { FaBed, FaRegCalendarAlt, FaGithub, FaHome, FaTimes } from "react-icons/fa";
+import { FaBed, FaGithub, FaHome, FaTimes, FaBusinessTime } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 type HamburgerMenuProps = {
@@ -79,7 +79,7 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
           </div>
           <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
             <HamburgerButton
-              icon={<FaRegCalendarAlt size={40} />}
+              icon={<FaBusinessTime size={40} />}
               title="登校目標時刻の変更"
               toggleEvent={redirectPromisedTime}
             />
