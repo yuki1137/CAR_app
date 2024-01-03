@@ -7,12 +7,14 @@ import { FaBed, FaCheck, FaTrashAlt, FaAngleLeft, FaAngleRight } from "react-ico
 import DatePicker, { DateObject, Value } from "react-multi-date-picker";
 import Button from "../../../components/Button";
 import { useTable, useSortBy, usePagination, Row, IdType, Column } from "react-table";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Absence } from "@prisma/client";
 import { IconContext } from "react-icons";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
+  const queryClient = useQueryClient();
   //DatePickerで今日以降の日付のみ選択可能にする
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -34,9 +36,44 @@ const Page = ({ params }: { params: { userId: string } }) => {
     absenceReason === "";
 
   // POSTリクエストのための useMutation フック
+
+  interface AbsenceResponse {
+    time: string; // ISO 8601フォーマットの日付
+    status: string; // 例: "Registered", "Failed" など
+    // 他にも必要に応じてフィールドを追加する
+  }
+
+  interface AbsenceResponse {
+    time: string;
+    status: string;
+  }
+
   const { mutate } = useMutation({
     mutationFn: async (data: { userId: string; absenceTimes: string[]; reason: string }) => {
-      await axios.post("/api/absence", data);
+      const response = await axios.post("/api/absence", data);
+      return response.data; // POSTリクエストの結果を返す
+    },
+    onSuccess: (data, variables) => {
+      // `variables` から `reason` を取得
+      const reason = variables.reason;
+
+      // レスポンスデータをAbsence配列に変換する
+      const newAbsences = Array.isArray(data.responses) ? data.responses : [data.responses];
+
+      // 日付、reasonを設定
+      const formattedAbsences = newAbsences.map((absence: AbsenceResponse) => ({
+        userId: userId, // userIdを追加
+        reason: reason, // `variables`から取得した理由を使用
+        absenceTime: new Date(absence.time).toLocaleDateString(), // ISOフォーマットをローカルの日付形式に変換
+      }));
+
+      // queryClientを使用してローカルクエリデータを更新
+      queryClient.setQueryData<Absence[]>(["absences", userId], (oldData) => {
+        return [...(oldData ?? []), ...formattedAbsences];
+      });
+
+      // ローカルstateのtableDataも更新
+      setTableData((prevTableData) => [...prevTableData, ...formattedAbsences]);
     },
   });
 
@@ -50,16 +87,18 @@ const Page = ({ params }: { params: { userId: string } }) => {
 
     const formattedAbsenceDates = absenceDate.map((date) => {
       if (date instanceof DateObject) {
-        return `${date.format("YYYY-MM-DD")}T10:30:00+09:00`;
+        return date.format("YYYY-MM-DD");
       }
       return "";
     });
 
     // mutate 関数を使用して POST リクエストを行う
-    mutate({
-      userId: userId,
-      absenceTimes: formattedAbsenceDates,
-      reason: absenceReason,
+    formattedAbsenceDates.forEach((absenceTime) => {
+      mutate({
+        userId: userId,
+        absenceTimes: [`${absenceTime}T10:30:00+09:00`],
+        reason: absenceReason,
+      });
     });
 
     // フィールドをクリアする
@@ -284,7 +323,6 @@ const Page = ({ params }: { params: { userId: string } }) => {
       <Header title="公欠の登録" icon={<FaBed size={30} />} userId={userId} />
       <h2 className="text-xl  text-center  my-6">いつ公欠しますか？</h2>
       <div className="flex justify-center items-center mb-4">
-        <div className="mr-2 text-base ite">日付</div>
         <DatePicker
           multiple={true}
           value={absenceDate}
@@ -293,6 +331,9 @@ const Page = ({ params }: { params: { userId: string } }) => {
           className="my-4 ml-2"
           style={{ width: "150px" }}
         />
+        <div className="ml-2">
+          <FaCalendarDays />
+        </div>
       </div>
       <div className="text-xl  justify-center text-center ">
         <input
@@ -396,7 +437,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
               ? `${currentPageIndex * pageSize + 1}
                -${Math.min((currentPageIndex + 1) * pageSize, rows.length)} 
                / ${rows.length} 件`
-              : "ユーザーデータがありません"}
+              : "公欠未登録"}
           </div>
           <button
             onClick={() => previousPage()}
