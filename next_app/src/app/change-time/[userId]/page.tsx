@@ -8,7 +8,7 @@ import convertHMtoDatetime from "../../../utils/convertHMtoDatetime";
 import TimePicker from "../../../components/DrumTimePicker";
 import { FaBusinessTime } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomLinearProgress from "@/components/CustomLinearProgress";
 
 type PostDataType = {
@@ -23,6 +23,7 @@ type UserInfo = {
 
 export default function Page({ params }: { params: { userId: string } }) {
   const userId = params.userId;
+  const queryClient = useQueryClient();
   const [newMinute, setNewMinute] = useState<number>(30);
   const [newHour, setNewHour] = useState<number>(8);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
@@ -41,7 +42,7 @@ export default function Page({ params }: { params: { userId: string } }) {
       console.log(res);
     },
     onSuccess: () => {
-      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ["user", userId] });
     },
   });
 
