@@ -16,6 +16,19 @@
   --text-color-dark: #ffffff; /* ダークモードのテキストカラー（白） */
 }
 
+.date-input {
+  border-radius: 5px;
+  border: 1px #d3d3d3 solid;
+  padding: 4px 12px;
+  background-color: white;
+  height: 22px;
+}
+
+.date-input:focus {
+  outline: none;
+  border: 1.5px solid #030303;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient() rgb(var(--background-start-rgb));
@@ -71,5 +84,13 @@ textarea {
 
   .bg-dark-mode-bg {
     background-color: #000; /* 黒色の背景 */
+  }
+
+  .date-input {
+    background-color: #000000;
+  }
+  .date-input:focus {
+    outline: none;
+    border: 1.5px solid #ffffff;
   }
 }

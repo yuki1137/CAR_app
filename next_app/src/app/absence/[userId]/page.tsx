@@ -11,6 +11,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Absence } from "@prisma/client";
 import { IconContext } from "react-icons";
 import { FaCalendarDays } from "react-icons/fa6";
+import CustomLinearProgress from "../../../components/CustomLinearProgress";
 
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
@@ -259,11 +260,6 @@ const Page = ({ params }: { params: { userId: string } }) => {
     rows,
   } = tableInstance;
 
-  if (isLoading) {
-    //isLoadingがtrueであればLoading...を表示
-    return <div>Loading...</div>;
-  }
-
   //テーブル全体のスタイル
   const tableStyles = {
     borderCollapse: "collapse" as "collapse",
@@ -321,6 +317,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
   return (
     <div>
       <Header title="公欠の登録" icon={<FaBed size={30} />} userId={userId} />
+      {isLoading ? <CustomLinearProgress /> : <div></div>}
       <h2 className="text-xl  text-center  my-6">いつ公欠しますか？</h2>
       <div className="flex justify-center items-center mb-4">
         <div className="mr-2">
@@ -332,10 +329,11 @@ const Page = ({ params }: { params: { userId: string } }) => {
           onChange={setAbsenceDate}
           minDate={tomorrow}
           className="my-4 ml-2"
+          inputClass="date-input"
           style={{ width: "150px" }}
         />
       </div>
-      <div className="text-xl  justify-center text-center ">
+      <div className="text-xl justify-center text-center ">
         <input
           type="text"
           // value="公欠理由を記述（例：帰省"
