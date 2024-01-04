@@ -339,7 +339,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
         <input
           type="text"
           // value="公欠理由を記述（例：帰省"
-          className="h-20 justify-center border-2 border-gray-600 p-2 rounded-md my-3 text-sm"
+          className="h-20 justify-center border border-gray-300 p-2 rounded-md my-3 text-sm"
           value={absenceReason}
           onChange={handleAbsenceReasonChange}
         />
