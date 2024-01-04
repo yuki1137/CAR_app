@@ -9,6 +9,7 @@ import TimePicker from "../../../components/DrumTimePicker";
 import { FaBusinessTime } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import CustomLinearProgress from "@/components/CustomLinearProgress";
 
 type PostDataType = {
   promisedTime: string;
@@ -63,21 +64,24 @@ export default function Page({ params }: { params: { userId: string } }) {
   return (
     <>
       <Header title="目標の変更" icon={<FaBusinessTime size={30} />} userId={userId} />
-
-      <div className="flex justify-center p-8">
-        <>現在の目標時間：</>
-        {userInfo ? convertTimeToHHMMFormat(userInfo.user.promisedTime) : <span>Loading...</span>}
-      </div>
-      <div className="flex justify-center">新しい目標を設定</div>
-
-      <div className="flex justify-center pt-2 font-bold">
-        <TimePicker handleTime={handleTime} />
-      </div>
-      <div className="flex justify-center pt-2 pb-2 font-bold">
-        <Button onClick={handleClicked} color="primary" isDisabled={isDisabled}>
-          決定
-        </Button>
-      </div>
+      {isLoading || !userInfo ? (
+        <CustomLinearProgress />
+      ) : (
+        <>
+          <div className="flex justify-center p-8">
+            <>現在の目標時間：{convertTimeToHHMMFormat(userInfo.user.promisedTime)}</>
+          </div>
+          <div className="flex justify-center">新しい目標を設定</div>
+          <div className="flex justify-center pt-2">
+            <TimePicker handleTime={handleTime} />
+          </div>
+          <div className="flex justify-center pt-2 pb-2 font-bold">
+            <Button onClick={handleClicked} color="primary" isDisabled={isDisabled}>
+              決定
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }
