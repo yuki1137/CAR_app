@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { User, Absence, Attendance } from "@prisma/client";
 import React from "react";
 import Header from "../../../components/Header";
@@ -16,7 +16,7 @@ type UserInfo = {
 };
 
 type AttendInfo = {
-  attendanceTime: Date;
+  attendanceTime: Date | string;
   isAttend: boolean;
 };
 
@@ -116,6 +116,7 @@ const getTodayAbsence = (absences: Absence[]) => {
 
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { data: userInfo, isLoading: isLoadingUser } = useQuery<UserInfo>({
@@ -142,10 +143,8 @@ const Page = ({ params }: { params: { userId: string } }) => {
       console.log(res);
     },
     onSuccess: () => {
-      // これでできるはずなんだがなぜか反映されない
-      // queryClient.invalidateQueries({ queryKey: ["attendInfo", userId] });
-      // queryClient.invalidateQueries({ queryKey: ["userInfo", userId] });
-      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ["attendInfo", userId] });
+      queryClient.invalidateQueries({ queryKey: ["userInfo", userId] });
     },
   });
 
