@@ -323,6 +323,9 @@ const Page = ({ params }: { params: { userId: string } }) => {
       <Header title="公欠の登録" icon={<FaBed size={30} />} userId={userId} />
       <h2 className="text-xl  text-center  my-6">いつ公欠しますか？</h2>
       <div className="flex justify-center items-center mb-4">
+        <div className="mr-2">
+          <FaCalendarDays />
+        </div>
         <DatePicker
           multiple={true}
           value={absenceDate}
@@ -331,9 +334,6 @@ const Page = ({ params }: { params: { userId: string } }) => {
           className="my-4 ml-2"
           style={{ width: "150px" }}
         />
-        <div className="ml-2">
-          <FaCalendarDays />
-        </div>
       </div>
       <div className="text-xl  justify-center text-center ">
         <input
