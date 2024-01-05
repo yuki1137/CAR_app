@@ -13,6 +13,7 @@ import convertHMtoDatetime from "../../utils/convertHMtoDatetime";
 import { useTable, usePagination, Row } from "react-table";
 import DrumTimePicker from "../../components/DrumTimePicker";
 import Button from "../../components/Button";
+import CustomLinearProgress from "../../components/CustomLinearProgress";
 
 type PostDataType = {
   name: string;
@@ -128,11 +129,6 @@ export default function Page() {
     rows,
   } = tableInstance;
 
-  if (isLoading) {
-    //isLoadingがtrueであればLoading...を表示
-    return <div>Loading...</div>;
-  }
-
   //テーブル全体のスタイル
   const tableStyles = {
     borderCollapse: "collapse" as "collapse", //隣接するセルの境界線を1つにまとめる,as "collapse"でこの値が文字列型であることを強調
@@ -170,11 +166,10 @@ export default function Page() {
     border: "1px solid" as const, //要素の境界線のスタイル
   };
 
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <>
       <Header title="管理ページ" icon={<FaUserCog size={30} />} />
+      {isLoading ? <CustomLinearProgress /> : <div></div>}
       <h2 className="text-xl  text-center my-4">ユーザー一覧</h2>
       <div style={tableContainerStyles}>
         {/* getTableProps 関数が返すオブジェクト内のすべてのプロパティと値が、<table> タグに個別のプロパティとして適用 */}
