@@ -55,10 +55,9 @@ const Page = ({ params }: { params: { userId: string } }) => {
       return response.data; // POSTリクエストの結果を返す
     },
     onSuccess: (data, variables) => {
-      // `variables` から `reason` を取得
+      // variablesはseMutationによって行われたPOSTリクエストのパラメータを参照
       const reason = variables.reason;
 
-      // レスポンスデータをAbsence配列に変換する
       const newAbsences = Array.isArray(data.responses) ? data.responses : [data.responses];
 
       // 日付、reasonを設定
@@ -69,12 +68,14 @@ const Page = ({ params }: { params: { userId: string } }) => {
       }));
 
       // queryClientを使用してローカルクエリデータを更新
-      queryClient.setQueryData<Absence[]>(["absences", userId], (oldData) => {
-        return [...(oldData ?? []), ...formattedAbsences];
-      });
+      // queryClient.setQueryData<Absence[]>(["absences", userId], (oldData) => {
+      //   return [...(oldData ?? []), ...formattedAbsences];
+      // });
+
+      queryClient.invalidateQueries({ queryKey: ["absences", userId] });
 
       // ローカルstateのtableDataも更新
-      setTableData((prevTableData) => [...prevTableData, ...formattedAbsences]);
+      // setTableData((prevTableData) => [...prevTableData, ...formattedAbsences]);
     },
   });
 
