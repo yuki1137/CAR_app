@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { User } from "@prisma/client";
 import axios from "axios";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
 import Header from "../../components/Header";
@@ -29,10 +29,14 @@ export default function Page() {
     },
   });
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: async (data: PostDataType) => {
       const { data: res } = await axios.post("/api/users", data);
       console.log(res);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
