@@ -25,6 +25,7 @@ textarea {
   font-family: "Noto Sans JP", sans-serif;
 }
 
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

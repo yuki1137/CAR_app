@@ -18,16 +18,9 @@ async function validateUserId(userId: string) {
 }
 
 const absenceSchema = z.object({
-  userId: z.string().refine(
-    async (userId) => {
-      return validateUserId(userId);
-    },
-    {
-      message: "存在しないユーザーIDです",
-    },
-  ),
+  userId: z.string(),
   reason: z.string(),
-  absenceTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
+  absenceTimes: z.array(z.string()), // 日付の配列
 });
 export { absenceSchema };
 
