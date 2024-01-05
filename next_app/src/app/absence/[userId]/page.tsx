@@ -15,7 +15,6 @@ import CustomLinearProgress from "../../../components/CustomLinearProgress";
 
 const Page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
-  const queryClient = useQueryClient();
   //DatePickerで今日以降の日付のみ選択可能にする
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -49,6 +48,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
     status: string;
   }
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: async (data: { userId: string; absenceTimes: string[]; reason: string }) => {
       const response = await axios.post("/api/absence", data);
