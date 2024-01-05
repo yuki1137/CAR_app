@@ -251,7 +251,7 @@ export default function Page() {
         <h3 className="text-lg text-center my-2">ユーザー名</h3>
         <input
           type="text"
-          className="border-2 border-gray-600 p-2 rounded-md"
+          className="border p-2 rounded-md"
           value={userName}
           onChange={handleNameChange}
         />
