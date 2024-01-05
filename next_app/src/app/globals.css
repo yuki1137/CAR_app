@@ -7,31 +7,15 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --dark-mode-bg-color: #000000; /* ダークモード時の背景色 */
-  --dark-mode-border-color: #ffffff; /* ダークモード時の枠線色 */
+  --dark-mode-bg-color: #000000;
+  --dark-mode-border-color: #ffffff;
   --menu-background-color-dark: #000000;
   --button-border-color-dark: #ffffff;
-  --border-color-light: #000000; /* ライトモード時のボーダーカラー (黒) */
-  --text-color-light: #000000; /* ライトモードのテキストカラー（黒） */
-  --text-color-dark: #ffffff; /* ダークモードのテキストカラー（白） */
-}
-
-.date-input {
-  border-radius: 5px;
-  border: 1px #d3d3d3 solid;
-  padding: 4px 12px;
-  background-color: white;
-  height: 22px;
-}
-
-.date-input:focus {
-  outline: none;
-  border: 1.5px solid #030303;
+  --border-color-light: #000000;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient() rgb(var(--background-start-rgb));
 }
 
 body,
@@ -41,37 +25,24 @@ textarea {
   font-family: "Noto Sans JP", sans-serif;
 }
 
-@media (prefers-color-scheme: light) {
-  body {
-    --border-color: var(--border-color-light);
-    --text-color: var(--text-color-light); /* ライトモードのテキストカラーを使用 */
-  }
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255; /* ダークモード時のフォアグラウンドカラー（白） */
-    --background-color: #000000; /* ダークモード時の背景色（黒） */
-    --input-background-color: #000000; /* ダークモード時の入力フィールドの背景色 */
-    --input-text-color: #ffffff; /* ダークモード時の入力フィールドのテキストカラー */
     --foreground-rgb: 255, 255, 255;
     --background-color: #000000;
-    --text-color: var(--text-color-dark); /* ダークモードのテキストカラーを使用 */
+    --input-background-color: #ffffff;
+    --input-text-color: #000000;
   }
 
   body {
-    color: rgb(var(--foreground-rgb)); /* ダークモード時のフォアグラウンドカラーを適用 */
-    background-color: var(--background-color); /* ダークモード時の背景色を適用 */
+    color: rgb(var(--foreground-rgb));
+    background-color: var(--background-color);
   }
 
   input {
-    background-color: var(
-      --input-background-color
-    ); /* ダークモード時の入力フィールドの背景色を適用 */
-    color: var(--input-text-color); /* ダークモード時の入力フィールドのテキストカラーを適用 */
-    border-color: var(
-      --input-text-color
-    ); /* ダークモード時の入力フィールドの境界線のカラーを適用 */
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    border-color: var(--input-text-color);
   }
 
   .dark-mode-bg {
@@ -80,17 +51,5 @@ textarea {
 
   .dark-mode-border {
     border-color: var(--dark-mode-border-color);
-  }
-
-  .bg-dark-mode-bg {
-    background-color: #000; /* 黒色の背景 */
-  }
-
-  .date-input {
-    background-color: #000000;
-  }
-  .date-input:focus {
-    outline: none;
-    border: 1.5px solid #ffffff;
   }
 }
