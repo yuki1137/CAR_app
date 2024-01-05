@@ -20,8 +20,15 @@ const Page = ({ params }: { params: { userId: string } }) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   // const initialDate = new DateObject(tomorrow);
 
+  let isReasonChange = false;
+
+  const reasonInputClicked = () => {
+    let isReasonChange = true;
+  };
+
+  // const [reasonInputClicked]
+  const [absenceReason, setAbsenceReason] = useState("");
   const [absenceDate, setAbsenceDate] = useState<Value>([]); //初期値を入れると複数選択できなくなる
-  const [absenceReason, setAbsenceReason] = useState("公欠理由を記述（例：帰省）");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const handleAbsenceReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,28 +61,8 @@ const Page = ({ params }: { params: { userId: string } }) => {
       const response = await axios.post("/api/absence", data);
       return response.data; // POSTリクエストの結果を返す
     },
-    onSuccess: (data, variables) => {
-      // variablesはseMutationによって行われたPOSTリクエストのパラメータを参照
-      const reason = variables.reason;
-
-      const newAbsences = Array.isArray(data.responses) ? data.responses : [data.responses];
-
-      // 日付、reasonを設定
-      const formattedAbsences = newAbsences.map((absence: AbsenceResponse) => ({
-        userId: userId, // userIdを追加
-        reason: reason, // `variables`から取得した理由を使用
-        absenceTime: new Date(absence.time).toLocaleDateString(), // ISOフォーマットをローカルの日付形式に変換
-      }));
-
-      // queryClientを使用してローカルクエリデータを更新
-      // queryClient.setQueryData<Absence[]>(["absences", userId], (oldData) => {
-      //   return [...(oldData ?? []), ...formattedAbsences];
-      // });
-
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["absences", userId] });
-
-      // ローカルstateのtableDataも更新
-      // setTableData((prevTableData) => [...prevTableData, ...formattedAbsences]);
     },
   });
 
@@ -337,10 +324,11 @@ const Page = ({ params }: { params: { userId: string } }) => {
       <div className="text-xl justify-center text-center ">
         <input
           type="text"
-          // value="公欠理由を記述（例：帰省"
           className="h-20 justify-center border border-gray-300 p-2 rounded-md my-3 text-sm"
           value={absenceReason}
           onChange={handleAbsenceReasonChange}
+          onClick={reasonInputClicked}
+          placeholder="公欠理由を記述（例：帰省）"
         />
       </div>
       <div className="flex justify-center" style={{ marginBottom: "40px" }}>
