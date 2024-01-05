@@ -31,19 +31,6 @@ const absenceSchema = z.object({
 });
 export { absenceSchema };
 
-//同じ人が同じ日に公欠登録しないか検証
-async function validateAbsence(userId: string, absenceTime: string) {
-  //年月日が同じ、時間が違うものもはじく
-  const datePart = absenceTime.slice(0, 10); // 'YYYY-MM-DD' 部分を取得
-  const minDate = new Date(datePart + "T00:00:00+09:00");
-  const maxDate = new Date(datePart + "T23:59:59+09:00");
-
-  const absence = await prisma.absence.findFirst({
-    where: { userId: userId, absenceTime: { gte: minDate, lte: maxDate } },
-  });
-  return absence === null; //存在しないabsenceならtrue
-}
-export { validateAbsence };
 
 const changeTimeSchema = z.object({
   id: z.string(),
