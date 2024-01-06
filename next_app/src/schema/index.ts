@@ -27,10 +27,9 @@ const absenceSchema = z.object({
     },
   ),
   reason: z.string(),
-  absenceTime: z.string().refine((value) => iso8601ExtendedRegex.test(value)),
+  absenceTimes: z.array(z.string().refine((value) => iso8601ExtendedRegex.test(value))),
 });
 export { absenceSchema };
-
 
 const changeTimeSchema = z.object({
   id: z.string(),
@@ -42,5 +41,3 @@ const attendanceTimeSchema = z.object({
   attendanceTime: z.string(),
 });
 export { attendanceTimeSchema };
-
-
