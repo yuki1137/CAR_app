@@ -354,7 +354,11 @@ const Page = ({ params }: { params: { userId: string } }) => {
             isDarkMode ? "bg-black" : "bg-gray-500"
           } bg-opacity-50`}
         >
-          <div className={`p-6 rounded shadow-lg ${isDarkMode ? "bg-dark-mode-bg" : "bg-white"}`}>
+          <div
+            className={`p-6 rounded shadow-lg  border border-gray-400 ${
+              isDarkMode ? "dark-mode-bg" : "bg-white"
+            }`}
+          >
             <p className="text-center mb-4">本当に削除しますか？</p>
             <div className="flex justify-center space-x-4">
               <button
