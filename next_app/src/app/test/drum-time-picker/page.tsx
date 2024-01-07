@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <div>
       <h1>DrumTimePicker</h1>
-      <DrumTimePicker handleTime={handleTime} size = "large" />
+      <DrumTimePicker handleTime={handleTime} />
     </div>
   );
 }

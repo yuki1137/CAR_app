@@ -28,7 +28,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
 
   // const [reasonInputClicked]
   const [absenceReason, setAbsenceReason] = useState("");
-  const [absenceDate, setAbsenceDate] = useState<Value>([]); //初期値を入れると複数選択できなくなる
+  const [absenceDate, setAbsenceDate] = useState<DateObject[]>([]); //初期値を入れると複数選択できなくなる
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const handleAbsenceReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +65,15 @@ const Page = ({ params }: { params: { userId: string } }) => {
       queryClient.invalidateQueries({ queryKey: ["absences", userId] });
     },
   });
+
+  const handleDateChange = (date: DateObject | DateObject[] | null) => {
+    // DatePickerからnullまたはDateObjectの配列が渡されることを期待
+    if (date instanceof DateObject) {
+      setAbsenceDate([date]); // 単一のDateObjectの場合、配列に変換
+    } else {
+      setAbsenceDate(date || []); // DateObjectの配列またはnullの場合
+    }
+  };
 
   const handleClick = async () => {
     setIsButtonClicked(true);
@@ -314,7 +323,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
         <DatePicker
           multiple={true}
           value={absenceDate}
-          onChange={setAbsenceDate}
+          onChange={handleDateChange}
           minDate={tomorrow}
           className="my-4 ml-2"
           inputClass="date-input"
