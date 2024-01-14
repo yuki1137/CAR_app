@@ -21,7 +21,7 @@ $ git clone　git@github.com:oXyut/check-attendance-docker.git
 
 ### 初回時のデータベースのテーブル作成
 1. コンテナに入ったあと、ターミナルで`$ sudo yarn run prisma generate`を実行
-2. 同じくターミナルで`$ sudo yarn run prisma migrate --name init`を実行
+2. 同じくターミナルで`$ sudo yarn run prisma migrate dev --name init`を実行
 
 
 
