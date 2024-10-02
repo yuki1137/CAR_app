@@ -9,7 +9,7 @@
 - [DBeaver](https://dbeaver.io/download/)：データベースクライアント
 ### リポジトリのクローン
 ```
-$ git clone　git@github.com:oXyut/check-attendance-docker.git
+$ git clone　git@github.com:yuki1137/CAR_app.git
 ```
 - これでエラーが出る場合は、SSHの設定ができていない可能性があります。  
 
