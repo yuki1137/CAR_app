@@ -23,6 +23,6 @@ $ git clone　git@github.com:yuki1137/CAR_app.git
 1. コンテナに入ったあと、ターミナルで`$ sudo yarn run prisma generate`を実行
 2. 同じくターミナルで`$ sudo yarn run prisma migrate dev --name init`を実行
 
-
+<!-- 本当にごめんなさいリポジトリの名前変わってしまいました -->
 
 
