@@ -24,6 +24,7 @@ model Attendance {
   userId          String        @db.Uuid
   attendanceTime  DateTime
   user            User @relation(fields: [userId], references: [id])
+  AttendanceRecord  AttendanceRecord[]
 }
 
 model Absence {
@@ -37,12 +38,13 @@ model Absence {
 model AttendanceRecord {
   id              String        @id @default(uuid()) @db.Uuid
   userId          String        @db.Uuid
-  attendanceTime  DateTime
-  arrivalTime     DateTime
+  attendanceId    String        @db.Uuid
+  latestPromisedTime  DateTime
   status          AttendanceStatus
   createdAt       DateTime      @default(now())
 
   user            User @relation(fields: [userId], references: [id])
+  attendance      Attendance @relation(fields: [attendanceId], references: [id])
 
   @@index([userId])
 }

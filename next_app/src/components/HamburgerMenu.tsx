@@ -47,7 +47,7 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
   const redirectAttendanceHistory = () => {
     if (userId) {
       handleMenuClose();
-      router.push("/history/${userId}");
+      router.push(`/history/${userId}`);
     }
   };
 
