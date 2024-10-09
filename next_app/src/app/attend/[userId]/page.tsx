@@ -28,11 +28,24 @@ const stringToDate = (time: Date | string) => {
   }
 };
 
-const convertTodayDate = (time: Date) => {
+// const convertTodayDate = (time: Date) => {
+//   const today = new Date();
+//   time.setFullYear(today.getFullYear());
+//   time.setMonth(today.getMonth());
+//   time.setDate(today.getDate());
+//   return time;
+// };
+const convertTodayDate = (time: Date | null) => {
+  if (!time) {
+    console.warn("Invalid Date object passed to convertTodayDate. Using default date.");
+    return new Date(); // timeがnullならデフォルトで今日の日付を返す
+  }
+
   const today = new Date();
   time.setFullYear(today.getFullYear());
   time.setMonth(today.getMonth());
   time.setDate(today.getDate());
+
   return time;
 };
 
@@ -46,10 +59,21 @@ const minutesToHHMMFormat = (minutes: number) => {
   return `${hour}時間${minute}分`;
 };
 
-const getLateMinutes = (promisedTime: Date | string) => {
+// const getLateMinutes = (promisedTime: Date | string) => {
+//   const currentTime = new Date();
+//   const revisedPromisedTime = convertTodayDate(stringToDate(promisedTime));
+//   // console.log("revised", currentTime, revisedPromisedTime);
+//   return getMinutes(currentTime) - getMinutes(revisedPromisedTime);
+// };
+
+const getLateMinutes = (promisedTime: Date | string | null) => {
+  if (!promisedTime) {
+    console.warn("promisedTime is null or undefined. Defaulting to current time.");
+    return 0; // promisedTimeがnullなら遅刻時間は0
+  }
+
   const currentTime = new Date();
   const revisedPromisedTime = convertTodayDate(stringToDate(promisedTime));
-  // console.log("revised", currentTime, revisedPromisedTime);
   return getMinutes(currentTime) - getMinutes(revisedPromisedTime);
 };
 
