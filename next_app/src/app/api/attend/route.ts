@@ -65,59 +65,57 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 出席時間をミリ秒に変換
-    if (attendance.attendanceTime) {
-      // // 出席時間を深夜0時からの経過ミリ秒に変換
-      // const attendanceDate = new Date(attendance.attendanceTime);
-      // const attendanceMidnight = new Date(
-      //   attendanceDate.getFullYear(),
-      //   attendanceDate.getMonth(),
-      //   attendanceDate.getDate(),
-      // );
-      // const attendanceTimeInMillis = attendanceDate.getTime() - attendanceMidnight.getTime();
+    // // 出席時間を深夜0時からの経過ミリ秒に変換
+    // const attendanceDate = new Date(attendance.attendanceTime);
+    // const attendanceMidnight = new Date(
+    //   attendanceDate.getFullYear(),
+    //   attendanceDate.getMonth(),
+    //   attendanceDate.getDate(),
+    // );
+    // const attendanceTimeInMillis = attendanceDate.getTime() - attendanceMidnight.getTime();
 
-      const attendanceTimeInMillis = (latestPromisedTime: Date | string) => {
-        // Dateオブジェクトに変換
-        const attendanceDate = new Date(attendance.attendanceTime);
+    const attendanceTimeInMillis = (attendanceTime: Date | string) => {
+      // Dateオブジェクトに変換
+      const attendanceDate = new Date(attendanceTime);
 
-        // 時間と分を取得
-        const hours = (attendance.attendanceTime.getUTCHours() + 9) % 24;
-        const minutes = attendance.attendanceTime.getMinutes();
+      // 時間と分を取得
+      const attendancehours = ((attendanceDate.getUTCHours() + 9) % 24) * 60;
+      const attendanceminutes = attendanceDate.getMinutes();
 
-        // HH:MMをミリ秒に変換
-        const milliseconds = (hours * 60 + minutes) * 60 * 1000; // HH:MMをミリ秒に変換
-        return milliseconds;
-      };
+      // HH:MMをミリ秒に変換
+      const attendancemilliseconds = attendancehours + attendanceminutes; // HH:MMを秒に変換
+      return attendancemilliseconds;
+    };
 
-      const latestPromisedTimeInMillis = (latestPromisedTime: Date | string) => {
-        // Dateオブジェクトに変換
-        const promisedDate = new Date(latestPromisedTime);
+    const latestPromisedTimeInMillis = (latestPromisedTime: Date | string) => {
+      // Dateオブジェクトに変換
+      const promisedDate = new Date(latestPromisedTime);
 
-        // 時間と分を取得
-        const hours = (promisedDate.getUTCHours() + 9) % 24;
-        const minutes = promisedDate.getMinutes();
+      // 時間と分を取得
+      const Promisedhours = ((promisedDate.getUTCHours() + 9) % 24) * 60;
+      const Promisedminutes = promisedDate.getMinutes();
 
-        // HH:MMをミリ秒に変換
-        const milliseconds = (hours * 60 + minutes) * 60 * 1000;
-        return milliseconds;
-      };
+      // HH:MMをミリ秒に変換
+      const Promisedmilliseconds = Promisedhours + Promisedminutes;
+      return Promisedmilliseconds;
+    };
 
-      // ステータスを判定 (latestPromisedTime を基に判定)
-      let status: "attendance" | "late" | "absence" | "officialleave" = "attendance";
-      if (attendanceTimeInMillis < latestPromisedTimeInMillis) {
-        status = "late"; // 出席時間が約束の時間より遅い場合
-      } else if (attendanceTimeInMillis >= latestPromisedTimeInMillis) {
-        status = "attendance"; // 出席時間が約束の時間と同じか早い場合
-      }
-
-      // AttendanceRecordのステータスを更新
-      await prisma.attendanceRecord.update({
-        where: { id: attendanceRecord.id },
-        data: { status: status }, // 判定したステータスを設定
-      });
-    } else {
-      // attendanceTimeがnullの場合は何もしない
+    // ステータスを判定 (latestPromisedTime を基に判定)
+    let status: "attendance" | "late" | "absence" | "officialleave" = "attendance";
+    if (
+      attendanceTimeInMillis(attendance.attendanceTime) >
+      latestPromisedTimeInMillis(attendanceRecord.latestPromisedTime)
+    ) {
+      status = "late"; // 出席時間が約束の時間より遅い場合
+    } else if (attendanceTimeInMillis <= latestPromisedTimeInMillis) {
+      status = "attendance"; // 出席時間が約束の時間と同じか早い場合
     }
+
+    // AttendanceRecordのステータスを更新
+    await prisma.attendanceRecord.update({
+      where: { id: attendanceRecord.id },
+      data: { status: status }, // 判定したステータスを設定
+    });
 
     return NextResponse.json({
       ok: true,
