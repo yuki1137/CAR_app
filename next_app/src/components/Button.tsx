@@ -1,14 +1,6 @@
 import clsx from "clsx";
 import React, { useState } from "react";
 
-interface ButtonProps {
-  onClick: () => void;
-  isDisabled?: boolean;
-  children?: React.ReactNode;
-  color?: keyof typeof ableColors;
-  size?: keyof typeof ableSizes;
-  className?: string;
-}
 
 const ableSizes = {
   medium: "m-1 px-4 py-2 text-md",
@@ -20,6 +12,16 @@ const ableColors = {
 };
 
 const disabledColor = "bg-gray-300 text-gray-500 cursor-not-allowed";
+
+
+interface ButtonProps {
+  onClick?: () => void;  // onClickをオプションに
+  isDisabled?: boolean;
+  children?: React.ReactNode;
+  color?: keyof typeof ableColors;
+  size?: keyof typeof ableSizes;
+  className?: string;
+}
 
 const Button = ({ onClick, isDisabled, children, color, size, className }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
@@ -34,12 +36,13 @@ const Button = ({ onClick, isDisabled, children, color, size, className }: Butto
   };
 
   const handleClick = () => {
-    if (isDisabled) return;
+    if (isDisabled || !onClick) return; // onClickがない場合は何もしない
     onClick();
   };
 
   return (
     <button
+      type="submit" // ここで明示的にtypeを指定するか、propsで受け取る
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
@@ -47,7 +50,7 @@ const Button = ({ onClick, isDisabled, children, color, size, className }: Butto
         "rounded-md transition duration-300 ease-in-out transform",
         ableSizes[size ?? "medium"],
         isDisabled ? disabledColor : ableColors[color ?? "primary"],
-        isPressed && !isDisabled && "scale-95", // クリック時に縮むアニメーション
+        isPressed && !isDisabled && "scale-95",
         className,
       )}
       disabled={isDisabled}
