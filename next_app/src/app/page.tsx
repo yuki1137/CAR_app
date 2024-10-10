@@ -1,88 +1,72 @@
 "use client";
-import { User } from "@prisma/client";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import Header from "../components/Header";
-import { FaHome } from "react-icons/fa";
-import { useState } from "react";
-import Button from "../components/Button";
-import { useRouter } from "next/navigation";
-import CustomLinearProgress from "../components/CustomLinearProgress";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Button from '@/components/Button';
+import CustomLinearProgress from '@/components/CustomLinearProgress';
+import Header from '@/components/Header';
+import { FaBusinessTime, FaHome, FaSign, FaSignInAlt } from 'react-icons/fa';
 
-export default function Page() {
+export default function LoginPage() {
+  const [name, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
-  // FIX: たまにisLoadingがtrueのままになってしまう
-  const { data, isLoading, error } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      console.log(data);
-      return data;
-    },
-  });
-
-  const [selectedName, setSelectedName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const userId = '';
 
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "") {
-      setIsDisabled(true);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // 認証APIにリクエストを送信する例
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.user) {
+      // ログイン成功した場合、ホームページにリダイレクト
+      router.push(`/attend/${data.user.id}`);
     } else {
-      setIsDisabled(false);
-      setSelectedName(e.target.value);
-    }
-  };
-
-  const handleClick = () => {
-    if (isLoading || !data) {
-      return;
-    }
-    const selectedUser = data.find((user) => user.name === selectedName);
-
-    if (selectedUser) {
-      const url = `/attend/${selectedUser.id}`;
-      router.push(url);
+      console.error('ログイン失敗',data.message);
+      alert('ログイン失敗');
     }
   };
 
   return (
-    <>
-      <Header title="HE研登校管理" icon={<FaHome size={30} />} />
-      {isLoading ? <CustomLinearProgress /> : <div></div>}
-      {error ? (
-        <div>エラーが発生しました： {error.message}</div>
-      ) : (
-        <div>
-          <div className="flex justify-center pt-8 pb-2 font-bold">
-            ユーザー選択（全{data ? data.length : " "}名）
-          </div>
-          <label className="flex justify-center">
-            <select
-              value={selectedName}
-              onChange={handleSelect}
-              className="w-32 px-2 py-2 rounded-md block appearance-none bg-white border border-gray-900 text-black"
-            >
-              {/* 初期オプション */}
-              <option value=""></option>
-              {/* data から取得した名前をオプションとしてマップ */}
-              {data &&
-                data.map((user) => (
-                  <option key={user.id} value={user.name} className="text-black">
-                    {user.name}
-                  </option>
-                ))}
-            </select>
-            <Button
-              onClick={handleClick}
-              isDisabled={isDisabled}
-              color="primary"
-              className="flex justify-center"
-            >
-              決定
-            </Button>
-          </label>
-        </div>
-      )}
-    </>
+    <div className="flex flex-col h-screen">
+      <div className="mb-4">
+        <Header title="ログイン" icon={<FaSignInAlt size={30} />} userId={userId} />
+      </div>
+      <form onSubmit={handleLogin} className='flex flex-col items-center justify-center h-screen'>
+        <input
+          type="text"
+          placeholder="Username"
+          value={name}
+          onChange={(e) => setUsername(e.target.value)}
+          className="mb-2 w-72 px-3 py-2 border border-gray-300 rounded"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="mb-2 w-72 px-3 py-2 border border-gray-300 rounded"
+        />
+        <Button type="submit" disabled={isDisabled || isLoading}>
+          {isLoading ? "Loading..." : 'ログイン'}
+        </Button>
+      </form>
+      {isLoading && <CustomLinearProgress />}
+      <div className="flex py-10 flex justify-center">
+        まだ登録していない？ 登録は
+        <a href="/register" className="text-blue-400 underline mr-9">こちら</a>
+      </div>
+    </div>
   );
 }
