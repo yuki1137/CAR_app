@@ -77,7 +77,7 @@ export default function Page({ params }: { params: { userId: string } }) {
             <TimePicker handleTime={handleTime} />
           </div>
           <div className="flex justify-center pt-2 pb-2 font-bold">
-            <Button onClick={handleClick} color="primary" isDisabled={isDisabled}>
+            <Button onClick={handleClicked} color="primary" isDisabled={isDisabled}>
               決定
             </Button>
           </div>
