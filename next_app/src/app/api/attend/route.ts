@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       const attendancehours = ((attendanceDate.getUTCHours() + 9) % 24) * 60;
       const attendanceminutes = attendanceDate.getMinutes();
 
-      // HH:MMをミリ秒に変換
+      // HH:MMを秒に変換
       const attendancemilliseconds = attendancehours + attendanceminutes; // HH:MMを秒に変換
       return attendancemilliseconds;
     };
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       const Promisedhours = ((promisedDate.getUTCHours() + 9) % 24) * 60;
       const Promisedminutes = promisedDate.getMinutes();
 
-      // HH:MMをミリ秒に変換
+      // HH:MMを秒に変換
       const Promisedmilliseconds = Promisedhours + Promisedminutes;
       return Promisedmilliseconds;
     };
@@ -107,7 +107,10 @@ export async function POST(req: NextRequest) {
       latestPromisedTimeInMillis(attendanceRecord.latestPromisedTime)
     ) {
       status = "late"; // 出席時間が約束の時間より遅い場合
-    } else if (attendanceTimeInMillis <= latestPromisedTimeInMillis) {
+    } else if (
+      attendanceTimeInMillis(attendance.attendanceTime) <=
+      latestPromisedTimeInMillis(attendanceRecord.latestPromisedTime)
+    ) {
       status = "attendance"; // 出席時間が約束の時間と同じか早い場合
     }
 
