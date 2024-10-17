@@ -13,8 +13,8 @@ datasource db {
 model User {
   id            String       @id @default(uuid()) @db.Uuid
   name          String       @unique
-  promisedTime  DateTime
-  password      String       
+  promisedTime  DateTime?
+  password      String?       
   Attendance Attendance[]
   Absence Absence[]
 }
