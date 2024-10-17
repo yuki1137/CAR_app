@@ -58,7 +58,7 @@ async function registerUser(name: string, password: string, inputDateString: str
     data: {
       name: name,
       password: hashedPassword,
-      promisedTime: promisedTime, // promisedTimeがnullでも良い場合はそのまま渡す
+      promisedTime: new Date(), // promisedTimeがnullでも良い場合はそのまま渡す
     },
   });
 

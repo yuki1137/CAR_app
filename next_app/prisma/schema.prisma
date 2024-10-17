@@ -13,10 +13,11 @@ datasource db {
 model User {
   id            String       @id @default(uuid()) @db.Uuid
   name          String       @unique
-  promisedTime  DateTime?
-  password      String?       
+  promisedTime  DateTime
+  password      String       
   Attendance Attendance[]
   Absence Absence[]
+  AttendanceRecord  AttendanceRecord[]
 }
 
 model Attendance {
@@ -24,6 +25,7 @@ model Attendance {
   userId          String        @db.Uuid
   attendanceTime  DateTime
   user            User @relation(fields: [userId], references: [id])
+  AttendanceRecord  AttendanceRecord[]
 }
 
 model Absence {
@@ -32,4 +34,25 @@ model Absence {
   reason          String
   absenceTime     DateTime
   user            User @relation(fields: [userId], references: [id])
+}
+
+model AttendanceRecord {
+  id              String        @id @default(uuid()) @db.Uuid
+  userId          String        @db.Uuid
+  attendanceId    String        @db.Uuid
+  latestPromisedTime  DateTime
+  status          AttendanceStatus
+  createdAt       DateTime      @default(now())
+
+  user            User @relation(fields: [userId], references: [id])
+  attendance      Attendance @relation(fields: [attendanceId], references: [id])
+
+  @@index([userId])
+}
+
+enum AttendanceStatus {
+  attendance
+  late
+  absence
+  officialleave
 }
