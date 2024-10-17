@@ -34,19 +34,19 @@ const formatDate = (dateString: string | Date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // 月は0始まりなので+1
   const day = String(date.getDate()).padStart(2, "0"); // 2桁に整形
-  return `${year}-${month}-${day}`;
+  return `${year}/${month}/${day}`;
 };
 // ステータスを日本語に変換
 const JaStatus = (status: "attendance" | "late" | "absence" | "officialleave") => {
   switch (status) {
     case "attendance":
-      return "出席";
+      return <span style={{ color: "green" }}>出席</span>;
     case "late":
-      return "遅刻";
+      return <span style={{ color: "red" }}>遅刻</span>;
     case "absence":
       return "欠席";
     case "officialleave":
-      return "公欠";
+      return <span style={{ color: "orange" }}>公欠</span>;
   }
 };
 
