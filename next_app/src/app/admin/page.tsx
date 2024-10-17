@@ -6,7 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { string } from "zod";
 import { stringify } from "querystring";
 import Header from "../../components/Header";
-import { FaUserCog, FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { FaUserCog, FaAngleRight, FaAngleLeft, FaTrashAlt } from "react-icons/fa";
 import { userAgent } from "next/server";
 import convertTimeToHHMMFormat from "../../utils/convertTimeToHHMMFormat";
 import convertHMtoDatetime from "../../utils/convertHMtoDatetime";
@@ -62,6 +62,63 @@ export default function Page() {
     setPromisedTime(""); // 目標時間をクリア
   };
 
+  // 人の削除機能のための設定
+  const [isPopupVisible, setIsPopupVisible] = useState<boolean>(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  // 削除ボタンをクリックしたときのハンドラー
+  const handleDeleteClick = (id: string) => {
+    setIsPopupVisible(true);
+    setDeleteTargetId(id);
+  };
+
+  // ポップアップの「はい」ボタンをクリックしたときのハンドラー
+  const confirmDelete = () => {
+    if (deleteTargetId) {
+      handleDelete(deleteTargetId);
+      setIsPopupVisible(false);
+      setDeleteTargetId(null);
+    }
+  };
+
+  // ポップアップの「いいえ」ボタンをクリックしたときのハンドラー
+  const cancelDelete = () => {
+    setIsPopupVisible(false);
+    setDeleteTargetId(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    // 削除APIを呼び出す
+    try {
+      await axios.delete(`/api/users?id=${id}`);
+      // データを再読み込みするか、ローカルの状態を更新する
+      console.log("Deleted successfully");
+      setTableData((prev) => prev.filter((user) => user.id !== id));
+    } catch (error) {
+      console.error("Error deleting user", error);
+    }
+  };
+
+
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  // ダークモードかどうかを判定するための useEffect
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkMode(mediaQuery.matches);
+
+    // メディアクエリの変更を監視する
+    const handler = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+    mediaQuery.addListener(handler);
+
+    // コンポーネントのアンマウント時にリスナーを削除
+    return () => mediaQuery.removeListener(handler);
+  }, []);
+
+  
+
   const [pageIndex] = useState(0);
   const pageSize = 10;
   const [tableData, setTableData] = useState<User[]>([]);
@@ -75,6 +132,17 @@ export default function Page() {
   const columns = React.useMemo(
     () => [
       //アロー関数、columns配列の中身の関数を定義
+      {
+        Header: "",
+        id: "actions", // `accessor` の代わりに `id` を使用
+        Cell: ({ row }: { row: Row<User> }) => {
+          return (
+            <button onClick={() => handleDeleteClick(row.original.id)} style={{ color: "red" }}>
+              <FaTrashAlt size={20} />
+            </button>
+          );
+        },
+      },
       {
         Header: "ユーザー名",
         accessor: (d: User) => d.name, //accessor関数でテーブルの各行に表示される値をどのように取得するかを定義
@@ -158,6 +226,35 @@ export default function Page() {
       <Header title="管理ページ" icon={<FaUserCog size={30} />} />
       {isLoading ? <CustomLinearProgress /> : <div></div>}
       <h2 className="text-xl  text-center my-4">ユーザー一覧</h2>
+      {isPopupVisible && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center ${
+            isDarkMode ? "bg-black" : "bg-gray-500"
+          } bg-opacity-50`}
+        >
+          <div
+            className={`p-6 rounded shadow-lg  border border-gray-400 ${
+              isDarkMode ? "dark-mode-bg" : "bg-white"
+            }`}
+          >
+            <p className="text-center mb-4">本当に削除しますか？</p>
+            <div className="flex justify-center space-x-4">
+              <button
+                className="hover:bg-gray-300 font-bold py-2 px-4 rounded"
+                onClick={confirmDelete}
+              >
+                はい
+              </button>
+              <button
+                className="hover:bg-gray-300 font-bold py-2 px-4 rounded"
+                onClick={cancelDelete}
+              >
+                いいえ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={tableContainerStyles}>
         {/* getTableProps 関数が返すオブジェクト内のすべてのプロパティと値が、<table> タグに個別のプロパティとして適用 */}
         <table {...getTableProps()} style={tableStyles}>
