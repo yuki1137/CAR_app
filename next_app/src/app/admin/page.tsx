@@ -230,10 +230,10 @@ export default function Page() {
         <div
           className={`fixed inset-0 flex items-center justify-center ${
             isDarkMode ? "bg-black" : "bg-gray-500"
-          } bg-opacity-50`}
+          } bg-opacity-50 z-50`}
         >
           <div
-            className={`p-6 rounded shadow-lg  border border-gray-400 ${
+            className={`p-6 rounded shadow-lg border border-gray-400 ${
               isDarkMode ? "dark-mode-bg" : "bg-white"
             }`}
           >
@@ -254,7 +254,7 @@ export default function Page() {
             </div>
           </div>
         </div>
-      )}
+        )}
       <div style={tableContainerStyles}>
         {/* getTableProps 関数が返すオブジェクト内のすべてのプロパティと値が、<table> タグに個別のプロパティとして適用 */}
         <table {...getTableProps()} style={tableStyles}>
