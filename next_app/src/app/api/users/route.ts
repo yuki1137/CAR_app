@@ -31,6 +31,10 @@ export async function DELETE(req: NextRequest) {
   }
   
   try {
+    await prisma.attendanceRecord.deleteMany({
+    where: { userId: id },
+    });
+
     await prisma.absence.deleteMany({
       where: { userId: id },
     });
