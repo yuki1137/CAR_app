@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HamburgerButton from "./HamburgerButton";
-import { FaBed, FaGithub, FaHome, FaTimes, FaBusinessTime, FaHistory } from "react-icons/fa";
+import { FaBed, FaGithub, FaHome, FaTimes, FaBusinessTime, FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 type HamburgerMenuProps = {
@@ -50,6 +50,12 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
       router.push(`/history/${userId}`);
     }
   };
+  const redirectLogout = () => {
+    if (userId) {
+      handleMenuClose();
+      router.push(`/`);
+    }
+  };
 
   return (
     <div
@@ -95,6 +101,13 @@ const HamburgerMenu = ({ closeMenu, userId }: HamburgerMenuProps) => {
               icon={<FaHistory size={40} />}
               title="出欠の履歴"
               toggleEvent={redirectAttendanceHistory}
+            />
+          </div>
+          <div className="border-t-2" style={{ borderColor: "var(--border-color)" }}>
+            <HamburgerButton
+              icon={<FaSignOutAlt size={40} />}
+              title="ログアウト"
+              toggleEvent={redirectLogout}
             />
           </div>
         </>
