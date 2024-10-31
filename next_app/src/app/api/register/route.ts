@@ -2,27 +2,20 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma'; // Prismaを使用している場合のインポート例
 import bcrypt from 'bcrypt';
 
-async function registerUser(name: string, password: string, inputDateString: string | null) {
+async function registerUser(name: string, password: string, inputDateString: string) {
   // パスワードのハッシュ化
   const hashedPassword = await bcrypt.hash(password, 10);
+  console.log("目標時間", inputDateString)
 
-  // promisedTimeを検証
-  let promisedTime = null;
-  if (inputDateString) {
-    promisedTime = new Date(inputDateString);
-    // promisedTimeが無効な場合はエラーをスロー
-    if (isNaN(promisedTime.getTime())) {
-      throw new Error("Invalid Date provided for promisedTime");
-    }
-  }
-
-  // Prismaのcreateメソッドでユーザーを作成
-  const user = await prisma.user.create({
-    data: {
+  const user = {
       name: name,
       password: hashedPassword,
-      promisedTime: new Date(), // promisedTimeがnullでも良い場合はそのまま渡す
-    },
+      promisedTime: inputDateString, 
+  };
+
+    // Prismaのcreateメソッドでユーザーを作成
+  await prisma.user.create({
+    data: user,
   });
 
   return user;
@@ -39,7 +32,7 @@ export async function POST(request: Request) {
     }
 
     // promisedTimeがない場合はnullを設定
-    const user = await registerUser(name, password, promisedTime || null);
+    const user = await registerUser(name, password, promisedTime);
 
     // 受信したデータの確認
     console.log('Received:', { name, password, promisedTime });

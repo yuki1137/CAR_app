@@ -5,11 +5,17 @@ import axios from 'axios';
 import Button from '@/components/Button';
 import Header from '@/components/Header';
 import { FaSignInAlt } from 'react-icons/fa';
+import DrumTimePicker from "../../components/DrumTimePicker";
+import convertHMtoDatetime from "../../utils/convertHMtoDatetime";
+
+
 
 
 export default function RegisterPage() {
   const [name, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [promisedTime, setPromisedTime] = useState("");
+
   const router = useRouter();
   const userId = '';
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
@@ -19,6 +25,12 @@ export default function RegisterPage() {
   useEffect(() => {
     setIsDisabled(!(name && password)); // 両方のフィールドが入力されている場合にボタンを有効化
   }, [name, password]);
+
+  const handleTime = (hour: number, minute: number) => {
+    const time = convertHMtoDatetime(hour, minute);
+    setPromisedTime(time);
+  };
+
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +42,7 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, password }),
+        body: JSON.stringify({ name, password, promisedTime }),
       });
 
       if (res.ok) {
@@ -68,6 +80,10 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           className="mb-2 w-72 px-3 py-2 border border-gray-300 rounded"
         />
+        <div className="flex justify-center items-center gap-5">
+          <h2 className="text-lg ">目標時間</h2>
+          <DrumTimePicker handleTime={handleTime} />
+        </div>
         <Button type="submit" disabled={isDisabled || isLoading}>
           {isLoading ? "Loading..." : '登録'}
         </Button>
