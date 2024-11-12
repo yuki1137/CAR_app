@@ -17,24 +17,30 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 認証APIにリクエストを送信する例
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok && data.user) {
-      // ログイン成功した場合、ホームページにリダイレクト
-      router.push(`/attend/${data.user.id}`);
-    } else {
-      console.error('ログイン失敗',data.message);
-      alert('ログイン失敗');
+  
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, password }),
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok && data.user) {
+        router.push(`/attend/${data.user.id}`);
+      } else {
+        console.error('ログイン失敗', data.message);
+        alert('ログイン失敗');
+      }
+    } catch (error) {
+      // errorの型チェックを行う
+      if (error instanceof Error) {
+        console.error('エラーが発生しました:', error.message);
+        alert(`エラーが発生しました: ${error.message}`);
+      } else {
+        console.error('不明なエラーが発生しました');
+      }
     }
   };
 
