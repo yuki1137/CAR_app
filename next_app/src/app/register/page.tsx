@@ -98,7 +98,7 @@ export default function RegisterPage() {
           <h2 className="text-lg">目標時間</h2>
           <DrumTimePicker handleTime={handleTime} />
         </div>
-        <Button type="submit" disabled={isLoading}>
+        <Button isDisabled={isLoading}>
           {isLoading ? "Loading..." : '登録'}
         </Button>
       </form>

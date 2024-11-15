@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     console.error("Error registering user:", error);
 
     // promisedTimeのエラー時
-    if (error.message === "Invalid Date provided for promisedTime") {
+    if (error instanceof Error && error.message === "Invalid Date provided for promisedTime") {
       return NextResponse.json({ message: 'Invalid promisedTime date.' }, { status: 400 });
     }
 
