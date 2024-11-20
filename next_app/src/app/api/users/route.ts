@@ -2,10 +2,8 @@
 import { userSchema } from "@/schema";
 import prisma from "../../../lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  // return NextResponse.json(body);
   try {
     const data = userSchema.parse(body);
     await prisma.user.create({
@@ -46,10 +44,6 @@ export async function DELETE(req: NextRequest) {
     await prisma.user.delete({
       where: { id: id },
     });
-
-    // await prisma.データベース.deleteMany({
-    //   where: { userId: id },
-    // });
 
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -13,7 +13,7 @@ async function registerUser(name: string, password: string, inputDateString: str
       promisedTime: inputDateString, 
   };
 
-    // Prismaのcreateメソッドでユーザーを作成
+  // Prismaのcreateメソッドでユーザーを作成
   await prisma.user.create({
     data: user,
   });
