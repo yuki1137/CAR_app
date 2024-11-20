@@ -58,8 +58,8 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           className="mb-2 w-72 px-3 py-2 border border-gray-300 rounded"
         />
-        <Button isDisabled={isDisabled || isLoading}>
-          {isLoading ? "Loading..." : 'ログイン'}
+        <Button isDisabled={isLoading}>
+        {isLoading ? "Loading..." : 'ログイン'}
         </Button>
       </form>
       {isLoading && <CustomLinearProgress />}
